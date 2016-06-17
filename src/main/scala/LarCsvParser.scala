@@ -8,26 +8,24 @@ import scala.io.Source
   * Created by grippinn on 6/17/16.
   */
 object LarCsvParser extends App {
-  val lines = Source.fromFile(new File(args(0))).getLines
+  val lines = Source.fromFile(new File(args(0))).getLines.toList
   var error = false
 
-  for(line <- lines) {
-    check(line)
+  if(!parseTS(lines.head)) {
+    println("TS ERROR: " + lines.head)
+    error = true
+  }
+
+  for(line <- lines.tail) {
+    if(!parseLAR(line)) {
+      println("LAR ERROR: " + line)
+      error = true
+    }
   }
 
   if(!error) {
     for(line <- Source.fromFile(new File("resources/Success.txt")).getLines) {
       println(line)
-    }
-  }
-
-  def check(s: String) = {
-    if(s.substring(0, 1) == "1" && !parseTS(s)) {
-      println("TS ERROR: " + s)
-      error = true
-    } else if(s.substring(0, 1) == "2" && !parseLAR(s)) {
-      println("LAR ERROR: " + s)
-      error = true
     }
   }
 
