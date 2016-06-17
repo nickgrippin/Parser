@@ -8,7 +8,7 @@ import scala.io.Source
   * Created by grippinn on 6/17/16.
   */
 object LarCsvParser extends App {
-  val lines = Source.fromFile(new File(args(0))).getLines.toList
+  val lines = Source.fromFile(new File(args(0))).getLines
   var error = false
 
   for(line <- lines) {
@@ -16,7 +16,9 @@ object LarCsvParser extends App {
   }
 
   if(!error) {
-    println("******************************************\n* Success!  The file parsed successfully *\n******************************************")
+    for(line <- Source.fromFile(new File("resources/Success.txt")).getLines) {
+      println(line)
+    }
   }
 
   def check(s: String) = {
