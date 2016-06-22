@@ -3,12 +3,15 @@ package main.scala
 import java.io.File
 
 import scala.io.Source
+import scala.util.Try
 
 /**
   * Created by grippinn on 6/17/16.
   */
-object LarCsvParser extends App {
-  val lines = Source.fromFile(new File(args(0))).getLines.toList
+object LarCsvParser extends App with LarParser {
+  val file = Try(Source.fromFile(new File(args(0))))
+    .getOrElse(Source.fromFile(new File(getClass.getResource("/testClean.txt").getPath)))
+  val lines = file.getLines.toList
   var error = false
 
   if(!parseTS(lines.head)) {
@@ -17,64 +20,19 @@ object LarCsvParser extends App {
   }
 
   for(line <- lines.tail) {
-    if(!parseLAR(line)) {
-      println("LAR ERROR: " + line)
+    val errors = parseLar(line)
+    if(errors.nonEmpty) {
       error = true
+      println("Errors on line #" + (lines.indexOf(line) + 1))
+      for(error <- errors) {
+        println("\t" + error)
+      }
     }
   }
 
   if(!error) {
-    for(line <- Source.fromFile(new File("resources/Success.txt")).getLines) {
+    for(line <- Source.fromFile(new File(getClass.getResource("/Success.txt").getPath)).getLines) {
       println(line)
-    }
-  }
-
-  def parseLAR(s: String): Boolean = {
-    val values = s.split('|').map(_.trim)
-    try {
-      val id = values(0).toInt
-      val respId = values(1)
-      val agencyCode = values(2).toInt
-      val loanId = values(3)
-      val loanDate = values(4)
-      val loanType = values(5).toInt
-      val propertyType = values(6).toInt
-      val loanPurpose = values(7).toInt
-      val occupancy = values(8).toInt
-      val loanAmount = values(9).toInt
-      val preapprovals = values(10).toInt
-      val actionType = values(11).toInt
-      val actionDate = values(12).toInt
-      val msa = values(13)
-      val state = values(14)
-      val county = values(15)
-      val tract = values(16)
-      val appEthnicity = values(17).toInt
-      val coAppEthnicity = values(18).toInt
-      val appRace1 = values(19).toInt
-      val appRace2 = values(20)
-      val appRace3 = values(21)
-      val appRace4 = values(22)
-      val appRace5 = values(23)
-      val coAppRace1 = values(24).toInt
-      val coAppRace2 = values(25)
-      val coAppRace3 = values(26)
-      val coAppRace4 = values(27)
-      val coAppRace5 = values(28)
-      val appSex = values(29).toInt
-      val coAppSex = values(30).toInt
-      val appIncome = values(31)
-      val purchaserType = values(32).toInt
-      val denial1 = values(33)
-      val denial2 = values(34)
-      val denial3 = values(35)
-      val rateSpread = values(36)
-      val hoepaStatus = values(37).toInt
-      val lienStatus = values(38).toInt
-
-      true
-    } catch {
-      case e: Exception => false
     }
   }
 
@@ -102,6 +60,10 @@ object LarCsvParser extends App {
       val contactPhone = values(18)
       val contactFax = values(19)
       val contactEmail = values(20)
+
+      if(respName == "HMDATestBank202") {
+        println("\nWARNING: Unable to read file input: Using clean test file instead\n")
+      }
 
       true
     } catch {
