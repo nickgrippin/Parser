@@ -10,6 +10,26 @@ trait LarParser {
     val values = s.split('|').map(_.trim)
     var errors = List[String]()
     val intFields = List(0, 2, 5, 6, 7, 8, 9, 10, 11, 12, 17, 18, 24, 29, 30, 32, 37, 38)
+    val intFieldsMap = Map(
+      0 -> "Record Identifier",
+      2 -> "Agency Code",
+      5 -> "Loan Type",
+      6 -> "Property Type",
+      7 -> "Loan Purpose",
+      8 -> "Owner Occupancy",
+      9 -> "Loan Amount",
+      10 -> "Preapprovals",
+      11 -> "Type of Action Taken",
+      12 -> "Date of Action",
+      17 -> "Applicant Ethnicity",
+      18 -> "Co-applicant Ethnicity",
+      24 -> "Co-applicant Race: 1",
+      29 -> "Applicant Sex",
+      30 -> "Co-applicant Sex",
+      32 -> "Type of Purchaser",
+      37 -> "HOEPA Status",
+      38 -> "Lien Status"
+    )
 
     if (values.length != 40 && values.length != 39) {
       errors = errors :::  List("Incorrect number of fields: " + values.length)
@@ -17,7 +37,8 @@ trait LarParser {
 
     for (int <- intFields) {
       if(Try(values(int).toInt).isFailure) {
-        errors = errors ::: List(s"Field at index $int is not an Integer")
+        val field = intFieldsMap(int)
+        errors = errors ::: List(s"$field is not an Integer")
       }
     }
 
