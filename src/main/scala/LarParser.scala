@@ -9,8 +9,7 @@ trait LarParser {
   def parseLar(s: String): List[String] = {
     val values = s.split('|').map(_.trim)
     var errors = List[String]()
-    val intFields = List(0, 2, 5, 6, 7, 8, 9, 10, 11, 12, 17, 18, 19, 24, 29, 30, 32, 37, 38)
-    val intFieldsMap = Map(
+    val intFields = Map(
       0 -> "Record Identifier",
       2 -> "Agency Code",
       5 -> "Loan Type",
@@ -36,9 +35,9 @@ trait LarParser {
       errors = errors :::  List("Incorrect number of fields: " + values.length)
     }
 
-    for (int <- intFields) {
+    for (int <- intFields.keys) {
       if(Try(values(int).toInt).isFailure) {
-        val field = intFieldsMap(int)
+        val field = intFields(int)
         errors = errors ::: List(s"$field is not an Integer")
       }
     }
