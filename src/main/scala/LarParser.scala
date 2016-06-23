@@ -9,7 +9,7 @@ trait LarParser {
   def parseLar(s: String): List[String] = {
     val values = s.split('|').map(_.trim)
     var errors = List[String]()
-    val intFields = List(0, 2, 5, 6, 7, 8, 9, 10, 11, 12, 17, 18, 24, 29, 30, 32, 37, 38)
+    val intFields = List(0, 2, 5, 6, 7, 8, 9, 10, 11, 12, 17, 18, 19, 24, 29, 30, 32, 37, 38)
     val intFieldsMap = Map(
       0 -> "Record Identifier",
       2 -> "Agency Code",
@@ -23,6 +23,7 @@ trait LarParser {
       12 -> "Date of Action",
       17 -> "Applicant Ethnicity",
       18 -> "Co-applicant Ethnicity",
+      19 -> "Applicant Race: 1",
       24 -> "Co-applicant Race: 1",
       29 -> "Applicant Sex",
       30 -> "Co-applicant Sex",
