@@ -14,9 +14,9 @@ If the parser is able to run successfully, it will print out "SUCCESS".
 If there is an error in the transmittal sheet (on the first line), it will print out "TS ERROR", followed by the 
 line data.
 
-If there is an error in any of the rows of LAR data, the program will print out a message with the line and field number.
-The line number is 1-based (so the minimum line number would be 2 for LAR data).  The field number indicates the index
-of the error after the line is split on the `"|"` symbol (0-based).
+If there is an error in any of the rows of LAR data, the program will print out a message with the line number and field 
+name.  The line number is 1-based (so the minimum line number would be 2 for LAR data).  The field name is the exact field
+within the LAR that has failed to parse correctly.
 
 If there is an incorrect number of fields, the program will print out a message with the line number and the number of
 fields that were found.
