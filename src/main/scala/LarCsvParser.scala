@@ -1,6 +1,7 @@
 package main.scala
 
 import java.io.File
+import javax.swing.JFileChooser
 
 import scala.io.Source
 import scala.util.Try
@@ -9,8 +10,7 @@ import scala.util.Try
   * Created by grippinn on 6/17/16.
   */
 object LarCsvParser extends App with LarParser {
-  val file = Try(Source.fromFile(new File(args(0))))
-    .getOrElse(Source.fromFile(new File(getClass.getResource("/testClean.txt").getPath)))
+  val file = pickFile()
   val lines = file.getLines.toList
   var error = false
 
@@ -70,5 +70,21 @@ object LarCsvParser extends App with LarParser {
       case e: Exception => false
     }
 
+  }
+
+  def pickFile(): Source = {
+    val chooser = new JFileChooser()
+    chooser.setCurrentDirectory(new java.io.File("."))
+    chooser.setDialogTitle("Input File")
+    chooser.setFileSelectionMode(JFileChooser.FILES_ONLY)
+    chooser.setAcceptAllFileFilterUsed(false)
+    if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+      System.out.println("getCurrentDirectory(): " + chooser.getCurrentDirectory)
+      System.out.println("getSelectedFile() : " + chooser.getSelectedFile)
+      Try(Source.fromFile(chooser.getSelectedFile))
+        .getOrElse(Source.fromFile(new File(getClass.getResource("/testClean.txt").getPath)))
+    } else {
+      Source.fromFile(new File(getClass.getResource("/testClean.txt").getPath))
+    }
   }
 }
