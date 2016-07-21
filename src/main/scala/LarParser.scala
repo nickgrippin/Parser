@@ -31,8 +31,9 @@ trait LarParser {
       38 -> "Lien Status"
     )
 
-    if (values.length != 40 && values.length != 39) {
+    if (values.length != 39) {
       errors = errors :::  List("Incorrect number of fields: " + values.length)
+      return errors
     }
 
     for (int <- numericFields.keys) {
