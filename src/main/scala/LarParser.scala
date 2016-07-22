@@ -31,8 +31,12 @@ trait LarParser {
       38 -> "Lien Status"
     )
 
-    if (values.length != 39) {
+    if ((values.length == 40 && !values(39).isEmpty) || values.length != 39) {
       errors = errors :::  List("Incorrect number of fields: " + values.length)
+      if(values.length > 39) {
+        println("VALUES '"+values(39)+"'")
+      }
+
       return errors
     }
 
